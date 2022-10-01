@@ -28,7 +28,14 @@ class Transaction {
 
   commit() {
     this.time = new Date();
-    this.account.addTransaction(this);
+
+    if (this.account.balance + this.value < 0) {
+      console.log('Insufficient funds');
+      console.log('CANCELLED: ', this);
+      process.exit();
+    } else {
+      this.account.addTransaction(this);
+    }
   }
 }
 
@@ -53,6 +60,11 @@ class Deposit extends Transaction {
 
 const myAccount = new Account("snow-patrol");
 
+
+t0 = new Deposit(120.00, myAccount);
+t0.commit();
+console.log('Transaction 0:', t0);
+
 t1 = new Withdrawal(50.25, myAccount);
 t1.commit();
 console.log('Transaction 1:', t1);
@@ -61,7 +73,7 @@ t2 = new Withdrawal(9.99, myAccount);
 t2.commit();
 console.log('Transaction 2:', t2);
 
-t3 = new Deposit(120.00, myAccount);
+t3 = new Withdrawal(60, myAccount);
 t3.commit();
 console.log('Transaction 3:', t3);
 
