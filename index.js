@@ -1,13 +1,24 @@
 let balance = 500.00;
 
 class Account {
-
   constructor(username) {
     this.username = username;
-    this.balance = 0;
+    this.transactions = [];
   }
 
+  get balance() {
+    let bal = 0;
+    for (let i of this.transactions) {
+      bal += i.value;
+    }
+    return bal;
+  }
+
+  addTransaction(transaction) {
+    this.transactions.push(transaction);
+  }
 }
+
 
 class Transaction {
   constructor(amount, account) {
@@ -16,7 +27,8 @@ class Transaction {
   }
 
   commit() {
-    this.account.balance += this.value;
+    this.time = new Date();
+    this.account.addTransaction(this);
   }
 }
 
@@ -26,6 +38,7 @@ class Withdrawal extends Transaction {
   }
 
 }
+
 
 class Deposit extends Transaction {
   get value() {
